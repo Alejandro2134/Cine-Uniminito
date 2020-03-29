@@ -26,7 +26,7 @@ npm run start
 
 # Distribución de carpetas
 
-Dentro de la carpeta src, está todo el código del proyecto, dentro de esta hay un archivo muy importante llamado index.js, este tiene las configuraciones del proyecto y en este todo se ejecuta **(entender este archivo no es muy importate entenderlo por ahora).**
+Dentro de la carpeta src, está todo el código del proyecto, dentro de esta hay un archivo muy importante llamado index.js, este tiene las configuraciones del proyecto y en este todo se ejecuta **(entender este archivo no es muy importante entenderlo por ahora).**
 
 Dentro de src hay un archivo llamado **keys.js** en este se configura un objeto que almacena la configuración para conectarse a la base de datos (en este punto no nos hemos conectado) con propiedades como el nombre de la base de datos, la contraseña configurada para acceder al servicio de mysql, el usuario configurado para ingresar al servicio de mysql, etc.
 
@@ -47,8 +47,26 @@ const express = require('express');
 const router = express.Router(); 
 ```
 
-## Ejemplo
+## ¿Como crear una ruta?
 
+### Ejemplo 1
+
+```
+router.get('/', (req, res) => { 
+    res.render('home');
+})
+```
+
+En este caso le estamos diciento a router que utilice el método get (método asociado a obtener el html de una página para mostrarla cuando voy a una ruta de internet) para renderizar o mostrar el contenido almacenado en el archivo html que tiene como nombre home en la ruta '/', La sintaxis de este codigo se basa en tres partes, el uso de la función get, que recibe 2 parametros: la ruta con la que quiero hacer algo en especifico, una función (en JavaScript se pueden hacer uso de las funciones como parametros) que recibe dos parametros req y res (**req** es una abreviatura de request, este parametro se usa para cuando quiero obtener datos de la página, por ejemplo si tengo un formulario en mi página yo puedo obtener los datos que ingresa el usuario por medio de req, mas adelante muestro un ejemplo de su uso y por otro lado **res** es una abreviatura de response, este paramatro se usa como respuesta, por ejemplo si el usuario entra a la ruta '/' con res le puedo decir que página html mostrarle) y el contenido de la función pasada como parametro, que va a indicar que hacer con esa ruta pasada como primer argumento.
+
+### Ejemplo 2
+
+```
+router.post('/', (req, res) => {
+    const { password, email } = req.body;
+    res.render('home', { password, email });
+})
+```
 
 
 
