@@ -1,0 +1,16 @@
+<div class="container p-4">
+    <h2>Peliculas:</h2>
+    <br>
+    <div class="row">
+        {{#each peliculas}}
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <img src="{{portada}}" class="card-img-top" height="370" width="500">
+                    <div class="card-body">
+                       <a href="/catalogo/{{idPelicula}}" class="btn btn-primary">Ver Funciones</a>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</div>

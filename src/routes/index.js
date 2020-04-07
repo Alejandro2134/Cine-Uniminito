@@ -1,14 +1,34 @@
 const express = require('express');
 const router = express.Router(); 
 
-router.get('/', (req, res) => {
+const pool = require('../database');
+
+router.get('/', (req, res) => { 
     res.render('home');
 })
 
-router.post('/', (req, res) => {
-    //const book = await pool.query('SELECT * FROM libro WHERE idLibro = ?', [id])
-    const { password, email } = req.body;
-    res.render('home', { password, email });
+router.post('/', async (req, res) => {
+
+    const { password, email, fecha_nacimiento, nombre, apellido, telefono} = req.body;
+
+    const newUser = {
+        nombre: nombre,
+        apellido: apellido,
+        fechaNacimiento: fecha_nacimiento,
+        telefono: telefono,
+        correo: email,
+        contraseña: password
+    }
+
+    await pool.query('INSERT INTO Cliente SET ?', [newUser]);
+    res.redirect('/peliculas');
+})
+
+router.get('/peliculas', async (req, res) => {
+
+    const peliculas = await pool.query('SELECT * FROM Pelicula');
+    res.render('peliculas', { peliculas });
+     
 })
 
 module.exports = router;
