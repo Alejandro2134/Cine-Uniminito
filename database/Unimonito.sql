@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 07-04-2020 a las 05:45:12
+-- Tiempo de generación: 07-04-2020 a las 20:29:46
 -- Versión del servidor: 10.4.10-MariaDB
 -- Versión de PHP: 7.3.12
 
@@ -43,6 +43,28 @@ CREATE TABLE `asiento` (
 
 INSERT INTO `asiento` (`idAsiento`, `disponibilidad`, `Sala_idSala`, `tipoAsiento`, `Costo_idCosto`, `numeroAsiento`) VALUES
 (2, 0, 1, 'General', 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cargo`
+--
+
+CREATE TABLE `cargo` (
+  `idCargo` int(11) NOT NULL,
+  `nombreCargo` varchar(45) COLLATE utf8_spanish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `cargo`
+--
+
+INSERT INTO `cargo` (`idCargo`, `nombreCargo`) VALUES
+(1, 'Cajero Ticket'),
+(2, 'Acomodador'),
+(3, 'Cajero Snacks'),
+(4, 'Servicios Generales'),
+(5, 'Supervisor');
 
 -- --------------------------------------------------------
 
@@ -94,8 +116,20 @@ CREATE TABLE `empleado` (
   `telefono` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
   `fechaInicio` date NOT NULL,
   `salario` double NOT NULL,
-  `Multiplex_idMultiplex` int(11) NOT NULL
+  `Multiplex_idMultiplex` int(11) NOT NULL,
+  `Cargo_idCargo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `empleado`
+--
+
+INSERT INTO `empleado` (`idEmpleado`, `cedula`, `nombre`, `telefono`, `fechaInicio`, `salario`, `Multiplex_idMultiplex`, `Cargo_idCargo`) VALUES
+(1, '51-289-5631', 'Brandi Crepel', '312729981', '2002-05-23', 1000000, 1, 1),
+(2, '71-006-5916', 'Haily Tremellier', '3139087653', '2009-04-25', 1000000, 4, 2),
+(3, '86-180-7494', 'Temp Coke', '316789901', '2015-12-13', 1000000, 5, 3),
+(4, '45-677-6849', 'Norah Bony', '3275349331', '2012-01-16', 800000, 7, 4),
+(5, '39-167-8022', 'Vally Varlow', '3145678990', '2008-06-22', 1500000, 11, 5);
 
 -- --------------------------------------------------------
 
@@ -236,7 +270,9 @@ CREATE TABLE `snack` (
 --
 
 INSERT INTO `snack` (`idSnack`, `nombre`, `precio`, `Multiplex_idMultiplex`) VALUES
-(1, 'Hot Dog', 6000, 1);
+(1, 'Hot Dog', 6000, 1),
+(2, 'Nachos', 3000, 1),
+(3, 'Sandwich', 6000, 1);
 
 -- --------------------------------------------------------
 
@@ -265,6 +301,12 @@ ALTER TABLE `asiento`
   ADD KEY `Costo_idCosto` (`Costo_idCosto`);
 
 --
+-- Indices de la tabla `cargo`
+--
+ALTER TABLE `cargo`
+  ADD PRIMARY KEY (`idCargo`);
+
+--
 -- Indices de la tabla `cliente`
 --
 ALTER TABLE `cliente`
@@ -281,7 +323,8 @@ ALTER TABLE `costo`
 --
 ALTER TABLE `empleado`
   ADD PRIMARY KEY (`idEmpleado`),
-  ADD KEY `Multiplex_idMultiplex` (`Multiplex_idMultiplex`);
+  ADD KEY `Multiplex_idMultiplex` (`Multiplex_idMultiplex`),
+  ADD KEY `Cargo_idCargo` (`Cargo_idCargo`);
 
 --
 -- Indices de la tabla `evaluacion`
@@ -352,6 +395,12 @@ ALTER TABLE `asiento`
   MODIFY `idAsiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT de la tabla `cargo`
+--
+ALTER TABLE `cargo`
+  MODIFY `idCargo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT de la tabla `cliente`
 --
 ALTER TABLE `cliente`
@@ -367,7 +416,7 @@ ALTER TABLE `costo`
 -- AUTO_INCREMENT de la tabla `empleado`
 --
 ALTER TABLE `empleado`
-  MODIFY `idEmpleado` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idEmpleado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `evaluacion`
@@ -409,7 +458,7 @@ ALTER TABLE `sala`
 -- AUTO_INCREMENT de la tabla `snack`
 --
 ALTER TABLE `snack`
-  MODIFY `idSnack` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idSnack` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `ticket`
@@ -432,7 +481,8 @@ ALTER TABLE `asiento`
 -- Filtros para la tabla `empleado`
 --
 ALTER TABLE `empleado`
-  ADD CONSTRAINT `empleado_ibfk_1` FOREIGN KEY (`Multiplex_idMultiplex`) REFERENCES `multiplex` (`idMultiplex`);
+  ADD CONSTRAINT `empleado_ibfk_1` FOREIGN KEY (`Multiplex_idMultiplex`) REFERENCES `multiplex` (`idMultiplex`),
+  ADD CONSTRAINT `empleado_ibfk_2` FOREIGN KEY (`Cargo_idCargo`) REFERENCES `cargo` (`idCargo`);
 
 --
 -- Filtros para la tabla `evaluacion`

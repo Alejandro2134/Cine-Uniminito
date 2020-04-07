@@ -20,13 +20,13 @@ router.post('/', async (req, res) => {
         contraseña: password
     }
 
-    await pool.query('INSERT INTO Cliente SET ?', [newUser]);
+    await pool.query('INSERT INTO cliente SET ?', [newUser]);
     res.redirect('/peliculas');
 })
 
 router.get('/peliculas', async (req, res) => {
 
-    const peliculas = await pool.query('SELECT * FROM Pelicula');
+    const peliculas = await pool.query('SELECT * FROM pelicula');
     res.render('peliculas', { peliculas });
      
 })
