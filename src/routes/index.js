@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
         apellido: apellido,
         fechaNacimiento: fecha_nacimiento,
         telefono: telefono,
-        correo: email,
+        email: email,
         contraseña: password
     }
 
