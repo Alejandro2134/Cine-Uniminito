@@ -9,19 +9,35 @@ router.get('/', (req, res) => {
 
 router.post('/', async (req, res) => {
 
-    const { password, email, fecha_nacimiento, nombre, apellido, telefono} = req.body;
+    let num = 0;
 
-    const newUser = {
-        nombre: nombre,
-        apellido: apellido,
-        fechaNacimiento: fecha_nacimiento,
-        telefono: telefono,
-        email: email,
-        contraseña: password
+    const data = JSON.parse(JSON.stringify(req.body));
+
+    console.log(data);
+
+    for(let key in data) {
+        if(data.hasOwnProperty(key)) {
+            num += 1;
+        }
     }
 
-    await pool.query('INSERT INTO cliente SET ?', [newUser]);
-    res.redirect('/peliculas');
+    if(num > 2) {
+        const { password, email, fecha_nacimiento, nombre, apellido, telefono} = req.body;
+
+        const newUser = {
+            nombre: nombre,
+            apellido: apellido,
+            fechaNacimiento: fecha_nacimiento,
+            telefono: telefono,
+            email: email,
+            contraseña: password
+        }
+
+        await pool.query('INSERT INTO cliente SET ?', [newUser]);
+        res.redirect('/peliculas');
+    } else {
+        res.redirect('/peliculas');
+    } 
 })
 
 router.get('/peliculas', async (req, res) => {
