@@ -13,6 +13,7 @@ router.post('/', async (req, res) => {
 
     const data = JSON.parse(JSON.stringify(req.body));
 
+    console.log(req.body);
     console.log(data);
 
     for(let key in data) {
