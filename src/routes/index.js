@@ -1,47 +1,25 @@
 const express = require('express');
 const router = express.Router(); 
 
+const passport = require('passport');
+
 const pool = require('../database');
 
-router.get('/', (req, res) => { 
+const { isNotLoggedIn, isLoggedIn } = require('../lib/auth');
+
+router.get('/', isNotLoggedIn, (req, res) => { 
     res.render('home');
 })
 
-router.post('/', async (req, res) => {
-
-    let num = 0;
-
-    const data = JSON.parse(JSON.stringify(req.body));
-
-    console.log(req.body);
-    console.log(data);
-
-    for(let key in data) {
-        if(data.hasOwnProperty(key)) {
-            num += 1;
-        }
-    }
-
-    if(num > 2) {
-        const { password, email, fecha_nacimiento, nombre, apellido, telefono} = req.body;
-
-        const newUser = {
-            nombre: nombre,
-            apellido: apellido,
-            fechaNacimiento: fecha_nacimiento,
-            telefono: telefono,
-            email: email,
-            contraseña: password
-        }
-
-        await pool.query('INSERT INTO cliente SET ?', [newUser]);
-        res.redirect('/peliculas');
-    } else {
-        res.redirect('/peliculas');
-    } 
+router.post('/', isNotLoggedIn, (req, res, next) => {
+    passport.authenticate('local.auth', {
+        successRedirect: '/peliculas',
+        failureRedirect: '/',
+        failureFlash: true
+    })(req, res, next);
 })
 
-router.get('/peliculas', async (req, res) => {
+router.get('/peliculas', isLoggedIn, async (req, res) => {
 
     const peliculas = await pool.query('SELECT * FROM pelicula');
     res.render('peliculas', { peliculas });
@@ -49,7 +27,3 @@ router.get('/peliculas', async (req, res) => {
 })
 
 module.exports = router;
-
-
-
-
