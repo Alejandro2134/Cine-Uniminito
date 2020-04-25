@@ -46,11 +46,8 @@ passport.use('local.auth', new LocalStrategy ({
 
             const user = rows[0];
 
-            console.log(user);
-            console.log(password);
-
             if(user.contraseña === password) {
-                done(null, user, req.flash('success', 'Bienvenido ' + user.nombre));
+                done(null, user, req.flash('success', 'Bienvenido ' + user.nombre + ' ' + user.apellido));
             } else {
                 done(null, false, req.flash('message', 'Contraseña incorrecta'));
             }
