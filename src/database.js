@@ -1,6 +1,5 @@
 const mysql = require('mysql'); 
 const { promisify } = require('util');
-
 const { database } = require('./keys');
  
 const connection = mysql.createConnection(database);
@@ -8,7 +7,7 @@ const connection = mysql.createConnection(database);
 connection.connect((err) => {
     err 
         ? console.log('error ' + err.stack)
-        : console.log('connected as id ' + connection.threadId);
+        : console.log('connected');
 })
 
 connection.query = promisify(connection.query);
