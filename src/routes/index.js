@@ -3,7 +3,7 @@ const router = express.Router();
 
 const passport = require('passport');
 
-const pool = require('../database');
+const connection = require('../database');
 
 const { isNotLoggedIn, isLoggedIn } = require('../lib/auth');
 
@@ -20,10 +20,10 @@ router.post('/', isNotLoggedIn, (req, res, next) => {
 })
 
 router.get('/peliculas', isLoggedIn, async (req, res) => {
-
-    const peliculas = await pool.query('SELECT * FROM pelicula');
+    
+    const peliculas = await connection.query('SELECT * FROM pelicula');
     res.render('peliculas', { peliculas });
-     
+ 
 })
 
 module.exports = router;
