@@ -1,7 +1,7 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
-const pool = require('../database');
+const connection = require('../database');
 
 passport.use('local.auth', new LocalStrategy ({
 
@@ -34,13 +34,13 @@ passport.use('local.auth', new LocalStrategy ({
             contraseña: password
         };
 
-        const result = await pool.query('INSERT INTO cliente SET ?', [newClient]);
+        const result = await connection.query('INSERT INTO cliente SET ?', [newClient]);
         newClient.idCliente = result.insertId;
         return done(null, newClient);
 
     } else {
 
-        const rows = await pool.query('SELECT * FROM cliente WHERE email = ?', [email]);
+        const rows = await connection.query('SELECT * FROM cliente WHERE email = ?', [email]);
 
         if(rows.length > 0) {
 
@@ -57,7 +57,6 @@ passport.use('local.auth', new LocalStrategy ({
         }
 
     }
-
 }));
 
 passport.serializeUser((user, done) => {
@@ -65,6 +64,6 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
-    const rows = await pool.query('SELECT * FROM cliente WHERE idCliente = ?', [id]);
+    const rows = await connection.query('SELECT * FROM cliente WHERE idCliente = ?', [id]);
     done(null, rows[0]);
 });
