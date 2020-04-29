@@ -50,6 +50,7 @@ app.use((req, res, next ) => {
 
 //Configuración de rutas
 app.use(require('./routes'));
+app.use('/multiplex', require('./routes/multiplex'));
 
 //Configuración carpeta public
 app.use(express.static(path.join(__dirname, 'public')));

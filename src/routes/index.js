@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router(); 
-
 const passport = require('passport');
-
 const connection = require('../database');
 
 const { isNotLoggedIn, isLoggedIn } = require('../lib/auth');
@@ -17,13 +15,6 @@ router.post('/', isNotLoggedIn, (req, res, next) => {
         failureRedirect: '/',
         failureFlash: true
     })(req, res, next);
-})
-
-router.get('/peliculas', isLoggedIn, async (req, res) => {
-    
-    const peliculas = await connection.query('SELECT * FROM pelicula');
-    res.render('peliculas', { peliculas });
- 
 })
 
 module.exports = router;
