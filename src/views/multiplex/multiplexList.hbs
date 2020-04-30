@@ -1,1 +1,16 @@
-<h1> Multiplex disponibles: </h1>
+<div class="container p-4">
+    <h2>Multiplex Disponibles:</h2>
+    <br>
+    <div class="row">
+        {{#each multiplexList}}
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <img src="" class="card-img-top" height="370" width="500" alt="{{nombreMultiplex}}">
+                    <div class="card-body">
+                       <a href="/multiplex/{{idMultiplex}}/peliculas" class="btn btn-primary">Ver peliculas</a>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</div>

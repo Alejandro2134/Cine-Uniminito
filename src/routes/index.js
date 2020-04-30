@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router(); 
 const passport = require('passport');
-const connection = require('../database');
 
 const { isNotLoggedIn, isLoggedIn } = require('../lib/auth');
 
@@ -11,10 +10,15 @@ router.get('/', isNotLoggedIn, (req, res) => {
 
 router.post('/', isNotLoggedIn, (req, res, next) => {
     passport.authenticate('local.auth', {
-        successRedirect: '/peliculas',
+        successRedirect: '/multiplex',
         failureRedirect: '/',
         failureFlash: true
     })(req, res, next);
+})
+
+router.get('/cerrarSesion', isLoggedIn, (req, res) => {
+    req.logOut();
+    res.redirect('/');
 })
 
 module.exports = router;

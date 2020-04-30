@@ -4,8 +4,11 @@ const connection = require('../database');
 
 const { isLoggedIn } = require('../lib/auth');
 
-router.get('/', (req, res) => {
-    res.render('multiplex/multiplexList');
+router.get('/', async (req, res) => {
+
+    const multiplexList = await connection.query('SELECT * FROM multiplex');
+    res.render('multiplex/multiplexList', { multiplexList });
+
 })
 
 router.get('/:idMultiplex', (req, res) => {
