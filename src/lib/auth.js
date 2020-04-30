@@ -12,6 +12,6 @@ module.exports = {
         if(!req.isAuthenticated()){
             return next();
         }
-        return res.redirect('/peliculas');
+        return res.redirect('/multiplex');
     }
 }
