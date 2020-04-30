@@ -7,7 +7,7 @@ const connection = mysql.createConnection(database);
 connection.connect((err) => {
     err 
         ? console.log('error ' + err.stack)
-        : console.log('connected');
+        : console.log('db connected');
 })
 
 connection.query = promisify(connection.query);
