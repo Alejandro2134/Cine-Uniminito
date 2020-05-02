@@ -6,7 +6,7 @@ const { isLoggedIn } = require('../lib/auth');
 
 router.get('/', async (req, res) => {
 
-    const multiplexList = await connection.query('SELECT * FROM multiplex');
+    const multiplexList = await connection.query('SELECT nombreMultiplex, idMultiplex FROM multiplex');
     res.render('multiplex/multiplexList', { multiplexList });
 
 })
@@ -19,14 +19,28 @@ router.get('/:idMultiplex', (req, res) => {
 router.get('/:idMultiplex/peliculas', async (req, res) => {
 
     const { idMultiplex } = req.params;
-    const peliculas = await connection.query('SELECT * FROM pelicula WHERE Multiplex_idMultiplex = ?', [idMultiplex]);
+    const peliculas = await connection.query('SELECT portada, nombrePelicula, idPelicula, Multiplex_idMultiplex FROM pelicula WHERE Multiplex_idMultiplex = ?', [idMultiplex]);
     res.render('multiplex/peliculas', { peliculas });
 
 })
 
-router.get('/:idMultiplex/peliculas/:idPelicula', (req, res) => {
+router.get('/:idMultiplex/peliculas/:idPelicula', async (req, res) => {
+
     const { idPelicula } = req.params;
-    res.render('multiplex/pelicula', {idPelicula});
+
+    const query = await connection.query('SELECT * FROM pelicula WHERE idPelicula = ?', [idPelicula]);
+    const query2 = await connection.query('SELECT * FROM funcion WHERE Pelicula_idPelicula = ?', [idPelicula]);
+
+    Promise.all([
+        query[0],
+        query2
+    ])
+    .then(([pelicula, funciones]) => {
+        res.render('multiplex/pelicula', {
+            pelicula,
+            funciones
+        });
+    });  
 })
 
 router.get('/:idMultiplex/peliculas/:idPelicula/reserva/idFuncion', isLoggedIn, (req, res) => {

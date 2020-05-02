@@ -1,1 +1,24 @@
-<h2>Pelicula {{idPelicula}}</h2>
+<br>
+<div class="container"> 
+     <div class="row d-flex h-100">
+        <div class="col-sm-4">
+            <img src="{{pelicula.portada}}" class="img-fluid d-none d-sm-block" height="300" width="300">
+        </div>
+
+        <div class="col-sm-8">
+            <p>Nombre: {{pelicula.nombrePelicula}}</p>
+            <p>Descripción: {{pelicula.descripcionPelicula}}</p>
+            <p>Genero: {{pelicula.genero}}</p>
+            <h2>Funciones:</h2>
+            {{#if user}}
+                {{#each funciones}}
+                    <a href="reserva/{{idFuncion}}"><p>Hora Inicio: {{horaInicio}} Hora Fin: {{horaFin}} Fecha Función: {{fechaFuncion}}</p></a>
+                {{/each}}
+            {{else}}
+                {{#each funciones}}
+                    <p>Hora Inicio: {{horaInicio}} Hora Fin: {{horaFin}} Fecha Función: {{fechaFuncion}}</p>
+                {{/each}}
+            {{/if}}
+        </div>
+     </div>
+</div>
