@@ -3,6 +3,6 @@ body {
     background-size: cover;
 }
 
-h2 {
+h2, p {
     color: white;
 }
