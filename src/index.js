@@ -6,6 +6,7 @@ const passport = require('passport');
 const session = require('express-session');
 const flash = require('connect-flash');
 const MySQLStore = require('express-mysql-session')(session);
+const helpers = require('./lib/helpers');
 
 const { database } = require('./keys');
 
@@ -21,6 +22,7 @@ app.engine('.hbs', exphbs({
     layoutsDir: path.join(app.get('views'), 'layouts'),
     partialsDir: path.join(app.get('views'), 'partials'),
     extname: '.hbs',
+    helpers: helpers
 }));
 app.set('view engine', '.hbs');
 
