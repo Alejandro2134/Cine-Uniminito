@@ -12,7 +12,9 @@
             <h2>Funciones:</h2>
             {{#if user}}
                 {{#each funciones}}
-                    <a href="reserva/{{idFuncion}}"><p>Hora Inicio: {{horaInicio}} Hora Fin: {{horaFin}} Fecha Función: {{fechaFuncion}}</p></a>
+                    <a href="{{../url}}/reserva/{{idFuncion}}">
+                        <p>Hora Inicio: {{horaInicio}} Hora Fin: {{horaFin}} Fecha Función: {{fechaFuncion}}</p>
+                    </a>
                 {{/each}}
             {{else}}
                 {{#each funciones}}

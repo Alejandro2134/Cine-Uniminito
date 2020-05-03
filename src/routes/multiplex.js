@@ -27,24 +27,27 @@ router.get('/:idMultiplex/peliculas', async (req, res) => {
 router.get('/:idMultiplex/peliculas/:idPelicula', async (req, res) => {
 
     const { idPelicula } = req.params;
+    const url = req.originalUrl;
 
     const query = await connection.query('SELECT * FROM pelicula WHERE idPelicula = ?', [idPelicula]);
     const query2 = await connection.query('SELECT * FROM funcion WHERE Pelicula_idPelicula = ?', [idPelicula]);
 
     Promise.all([
         query[0],
-        query2
+        query2,
+        url
     ])
-    .then(([pelicula, funciones]) => {
+    .then(([pelicula, funciones, url]) => {
         res.render('multiplex/pelicula', {
             pelicula,
-            funciones
+            funciones,
+            url
         });
     });  
 })
 
-router.get('/:idMultiplex/peliculas/:idPelicula/reserva/idFuncion', isLoggedIn, (req, res) => {
-
+router.get('/:idMultiplex/peliculas/:idPelicula/reserva/:idFuncion', isLoggedIn, (req, res) => {
+    res.render('multiplex/reserva');
 });
 
 router.post('/:idMultiplex/peliculas/:idPelicula/reserva/idFuncion', async (req, res) => {
