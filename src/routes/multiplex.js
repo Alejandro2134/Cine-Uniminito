@@ -12,8 +12,10 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/:idMultiplex', (req, res) => {
+
     const { idMultiplex } = req.params; 
     res.render('multiplex/multiplexHome', { idMultiplex });
+    
 })
 
 router.get('/:idMultiplex/peliculas', async (req, res) => {
@@ -52,11 +54,14 @@ router.get('/:idMultiplex/peliculas/:idPelicula/reserva/:idFuncion', isLoggedIn,
 
     if(asientoSeleccionado !== undefined) {
 
-        connection.beginTransaction(function (err) {
+        connection.beginTransaction((err) => {
+
             if (err) { throw err; };
-            connection.query('UPDATE asiento SET disponibilidad = "1" WHERE idAsiento = ?', asientoSeleccionado, function (err) {
+
+            connection.query('UPDATE asiento SET disponibilidad = "1" WHERE idAsiento = ?', asientoSeleccionado, (err) => {
+
                 if(err) {
-                    return connection.rollback(function () {
+                    return connection.rollback(() => {
                         throw err;
                     })
                 }
@@ -71,9 +76,10 @@ router.get('/:idMultiplex/peliculas/:idPelicula/reserva/:idFuncion', isLoggedIn,
                     Funcion_idFuncion: idFuncion
                 }
 
-                connection.query('INSERT INTO reserva SET ?', [newReservation], function (err) {
+                connection.query('INSERT INTO reserva SET ?', [newReservation], (err) => {
+
                     if(err) {
-                        return connection.rollback(function () {
+                        return connection.rollback(() => {
                             throw err;
                         })
                     }
@@ -86,19 +92,22 @@ router.get('/:idMultiplex/peliculas/:idPelicula/reserva/:idFuncion', isLoggedIn,
                         Funcion_idFuncion: idFuncion
                     }
 
-                    connection.query('INSERT INTO ticket SET ?', [newTicket], function(err) {
+                    connection.query('INSERT INTO ticket SET ?', [newTicket], (err) => {
+
                         if(err) {
-                            return connection.rollback(function () {
+                            return connection.rollback(() => {
                                 throw err;
                             })
                         }
 
-                        connection.commit(function(err) {
+                        connection.commit((err) => {
+
                             if(err) {
-                                return connection.rollback(function () {
+                                return connection.rollback(() => {
                                     throw err;
                                 })
                             }
+
                         })
                     })
                 })
@@ -115,6 +124,7 @@ router.post('/:idMultiplex/peliculas/:idPelicula/reserva/:idFuncion', async (req
 
     const { idFuncion } = req.params; //Se obtiene el idFuncion de la url
     res.redirect('/:idMultiplex/peliculas/:idPelicula/reserva/idFuncion');
+
 })
 
 module.exports = router;
