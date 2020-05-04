@@ -1,1 +1,19 @@
-<h1>Reserva</h1>
+<link rel="stylesheet" href="/css/reserva.css">
+
+<div class="container p-4">
+    <h2>Reserva</h2>
+    <br>
+    <div class="row">
+        {{#each asientos}}
+            <div class="col-md-2">
+                <form method="GET">
+                    <button value="{{idAsiento}}" name="asiento" class="disponibilidad{{disponibilidad}}">
+                        <img src="/img/asiento.jpg" height="80" width="80" alt="asiento"/>
+                    </button>
+                </form>
+                <br>
+            </div>
+        {{/each}}
+    </div>
+</div>
+
