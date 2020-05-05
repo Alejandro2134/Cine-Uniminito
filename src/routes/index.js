@@ -11,6 +11,7 @@ router.get('/', isNotLoggedIn, (req, res) => {
 router.post('/', isNotLoggedIn, (req, res, next) => {
     passport.authenticate('local.auth', {
         successRedirect: '/multiplex',
+        successRedirect: '/empleado',
         failureRedirect: '/',
         failureFlash: true
     })(req, res, next);

@@ -1,0 +1,25 @@
+<link rel="stylesheet" href="css/home.css">
+
+<form action="/src/lib/passportEmple.js" method="POST">
+    <section class="form-login text-center">
+        <h4>Login Empleado</h4>
+        <input class = 'controls' type="cedula" name="cedula" id="cedula" aria-describedby="cedulaHelp" placeholder="Ingrese su Cedula">
+        <button class="btn btn-outline" type="submit">Iniciar Sesión</button>
+        <br>
+        <p><a href="#">¿Quiero crear una Cuenta?</a></p>
+    </section>
+</form>
+
+<form action="/" method="POST" class="text-center"> 
+    <section class="form-register">
+        <h4>Registro Empleado</h4>
+        <input class="controls" type="text" name="nombre" id="nombre" placeholder="Ingrese su Nombre y Apellido">
+        <input class="controls" type="cedula" name="cedula" id="cedula" aria-describedby="cedulaHelp" placeholder="Ingrese su Cedula">
+        <input class="controls" type="text" name="fecha_inicio" id="fecha_inicio" placeholder="Ingrese su Fecha de Inicio">
+        <input class="controls" type="text" name="telefono" id="telefono" placeholder="Ingrese su Telefono">
+        <input class="controls" type="text" name="salario" id="salario"  placeholder="Ingrese su Salario">
+        <p>Estoy de acuerdo con <a href="#"> Terminos y Condiciones</a></p>
+        <button class="btn btn-outline" type="submit">Registrar</button>
+        <p><a href="#">¿Ya tengo Cuenta?</a></p>
+    </section>
+</form>
