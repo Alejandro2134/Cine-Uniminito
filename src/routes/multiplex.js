@@ -15,7 +15,7 @@ router.get('/:idMultiplex', (req, res) => {
 
     const { idMultiplex } = req.params; 
     res.render('multiplex/multiplexHome', { idMultiplex });
-    
+
 })
 
 router.get('/:idMultiplex/peliculas', async (req, res) => {
@@ -50,15 +50,37 @@ router.get('/:idMultiplex/peliculas/:idPelicula', async (req, res) => {
 
 router.get('/:idMultiplex/peliculas/:idPelicula/reserva/:idFuncion', isLoggedIn, async (req, res) => {
 
-    const asientoSeleccionado = req.query.asiento;
+    const asientos = await connection.query('SELECT idAsiento, disponibilidad FROM asiento WHERE Sala_idSala = "1"');
+    res.render('multiplex/reserva', { asientos });
 
-    if(asientoSeleccionado !== undefined) {
+});
 
-        connection.beginTransaction((err) => {
+router.post('/:idMultiplex/peliculas/:idPelicula/reserva/:idFuncion', async (req, res) => {
 
-            if (err) { throw err; };
+    const { asiento } = req.body;
+    const { idMultiplex, idPelicula, idFuncion } = req.params;
 
-            connection.query('UPDATE asiento SET disponibilidad = "1" WHERE idAsiento = ?', asientoSeleccionado, (err) => {
+    connection.beginTransaction(err => {
+
+        if (err) { throw err; };
+
+        connection.query('UPDATE asiento SET disponibilidad = "1" WHERE idAsiento = ?', asiento, async err => {
+
+            if(err) {
+                return connection.rollback(() => {
+                    throw err;
+                })
+            }
+
+            const fechaFuncion = await connection.query('SELECT fechaFuncion FROM funcion WHERE idFuncion = ?', idFuncion);
+        
+            const newReservation = {
+                Cliente_idCliente: req.user.idCliente,
+                fechaFuncion: fechaFuncion[0].fechaFuncion,
+                Funcion_idFuncion: idFuncion
+            }
+
+            connection.query('INSERT INTO reserva SET ?', [newReservation], err => {
 
                 if(err) {
                     return connection.rollback(() => {
@@ -66,17 +88,12 @@ router.get('/:idMultiplex/peliculas/:idPelicula/reserva/:idFuncion', isLoggedIn,
                     })
                 }
 
-                const { idFuncion } = req.params;
-                const fechaFuncion = await connection.query('SELECT fechaFuncion FROM funcion WHERE idFuncion = ?', idFuncion);
-
-                const newReservation = {
+                const newTicket = {
                     Cliente_idCliente: req.user.idCliente,
-                    fechaReserva: Date.now(),
-                    fechaFuncion: fechaFuncion,
                     Funcion_idFuncion: idFuncion
                 }
 
-                connection.query('INSERT INTO reserva SET ?', [newReservation], (err) => {
+                connection.query('INSERT INTO ticket SET ?', [newTicket], err => {
 
                     if(err) {
                         return connection.rollback(() => {
@@ -84,15 +101,7 @@ router.get('/:idMultiplex/peliculas/:idPelicula/reserva/:idFuncion', isLoggedIn,
                         })
                     }
 
-                    const { idFuncion } = req.params;
-
-                    const newTicket = {
-                        fechaCompra: Date.now(),
-                        Cliente_idCliente: req.user.idCliente,
-                        Funcion_idFuncion: idFuncion
-                    }
-
-                    connection.query('INSERT INTO ticket SET ?', [newTicket], (err) => {
+                    connection.commit((err) => {
 
                         if(err) {
                             return connection.rollback(() => {
@@ -100,31 +109,13 @@ router.get('/:idMultiplex/peliculas/:idPelicula/reserva/:idFuncion', isLoggedIn,
                             })
                         }
 
-                        connection.commit((err) => {
-
-                            if(err) {
-                                return connection.rollback(() => {
-                                    throw err;
-                                })
-                            }
-
-                        })
                     })
                 })
             })
-        });
-    }
+        })
+    });
 
-    const asientos = await connection.query('SELECT idAsiento, disponibilidad FROM asiento WHERE Sala_idSala = "1"')
-    res.render('multiplex/reserva', { asientos });
-
-});
-
-router.post('/:idMultiplex/peliculas/:idPelicula/reserva/:idFuncion', async (req, res) => {
-
-    const { idFuncion } = req.params; //Se obtiene el idFuncion de la url
-    res.redirect('/:idMultiplex/peliculas/:idPelicula/reserva/idFuncion');
-
+    res.redirect('/multiplex/' + idMultiplex + '/peliculas/' + idPelicula + '/reserva/' + idFuncion);
 })
 
 module.exports = router;
