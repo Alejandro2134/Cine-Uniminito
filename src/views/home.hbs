@@ -5,12 +5,18 @@
         <h4>Login</h4>
         <input class="controls" type="email" name="email" id="email" aria-describedby="emailHelp" placeholder="Ingrese su Email">
         <input class="controls" type="password" name="password" id="contraseña"  placeholder="Ingrese su Contraseña">
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">Tipo de usuario</label>
+            <select class="form-control" id="eleccion" name="eleccion">
+            <option>Cliente</option>
+            <option>Empleado</option>
+            </select>
+        </div>
         <button class="btn btn-outline" type="submit">Iniciar Sesión</button>
         <br>
         <p><a href="#">¿Quiero crear una Cuenta?</a></p>
     </section>
 </form>
-
 
 <form action="/" method="POST" class="text-center"> 
     <section class="form-register">

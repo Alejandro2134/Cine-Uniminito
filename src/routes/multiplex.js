@@ -80,7 +80,7 @@ router.post('/:idMultiplex/peliculas/:idPelicula/reserva/:idFuncion', async (req
                 Funcion_idFuncion: idFuncion
             }
 
-            connection.query('INSERT INTO reserva SET ?', [newReservation], err => {
+            connection.query('INSERT INTO reserva SET ?', newReservation, err => {
 
                 if(err) {
                     return connection.rollback(() => {
@@ -93,7 +93,7 @@ router.post('/:idMultiplex/peliculas/:idPelicula/reserva/:idFuncion', async (req
                     Funcion_idFuncion: idFuncion
                 }
 
-                connection.query('INSERT INTO ticket SET ?', [newTicket], err => {
+                connection.query('INSERT INTO ticket SET ?', newTicket, err => {
 
                     if(err) {
                         return connection.rollback(() => {
