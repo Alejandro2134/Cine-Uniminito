@@ -21,10 +21,10 @@ passport.use('local.auth', new LocalStrategy ({
         }
     }
 
-    if(num > 2) {
+    if(num > 3) {
 
         const { fecha_nacimiento, nombre, apellido, telefono } = req.body;
-
+    
         const newClient = {
             nombre: nombre,
             apellido: apellido,
@@ -33,37 +33,72 @@ passport.use('local.auth', new LocalStrategy ({
             email: email,
             contraseña: password
         };
-
+    
         const result = await connection.query('INSERT INTO cliente SET ?', [newClient]);
         newClient.idCliente = result.insertId;
         return done(null, newClient);
-
+    
     } else {
 
-        const rows = await connection.query('SELECT * FROM cliente WHERE email = ?', [email]);
+        if(data.eleccion === 'Cliente') {
 
-        if(rows.length > 0) {
-
-            const user = rows[0];
-
-            if(user.contraseña === password) {
-                done(null, user, req.flash('success', 'Bienvenido ' + user.nombre + ' ' + user.apellido));
+            const rows = await connection.query('SELECT * FROM cliente WHERE email = ?', [email]);
+    
+            if(rows.length > 0) {
+        
+                const user = rows[0];
+        
+                if(user.contraseña === password) {
+                    done(null, user, req.flash('success', 'Bienvenido ' + user.nombre + ' ' + user.apellido));
+                } else {
+                    done(null, false, req.flash('message', 'Contraseña incorrecta'));
+                }
+        
             } else {
-                done(null, false, req.flash('message', 'Contraseña incorrecta'));
+                return done(null, false, req.flash('message', 'El nombre de usuario no existe'));
             }
 
         } else {
-            return done(null, false, req.flash('message', 'El nombre de usuario no existe'));
-        }
-
+            const rows = await connection.query('SELECT * FROM empleado WHERE email = ?', [email]);
+    
+            if(rows.length > 0) {
+        
+                const user = rows[0];
+        
+                if(user.cedula === password) {
+                    done(null, user, req.flash('success', 'Bienvenido empleado ' + user.nombre));
+                } else {
+                    done(null, false, req.flash('message', 'Contraseña incorrecta'));
+                }
+        
+            } else {
+                return done(null, false, req.flash('message', 'El nombre de empleado no existe'));
+            }
+        }      
     }
+
 }));
 
 passport.serializeUser((user, done) => {
-    done(null, user.idCliente);
+    if(user.hasOwnProperty('idCliente')) {
+        done(null, user.idCliente);
+    } else {
+        done(null, user.idEmpleado);
+    }
 });
 
 passport.deserializeUser(async (id, done) => {
-    const rows = await connection.query('SELECT * FROM cliente WHERE idCliente = ?', [id]);
-    done(null, rows[0]);
+    try {
+        const rows = await connection.query('SELECT * FROM cliente WHERE idCliente = ?', id);
+
+        if(rows[0].hasOwnProperty('idCliente')) {
+            done(null, rows[0]);
+        } else {
+            const rows2 = await connection.query('SELECT * FROM empleado WHERE idEempleado = ?', id);
+            done(null, rows2[0]);
+        }
+    } catch (error) {
+        const rows3 = await connection('SELECT * FROM empleado WHERE idEmpledo = ?', id); 
+        done(null, rows3[0]);
+    }
 });
