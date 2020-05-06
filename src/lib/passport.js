@@ -94,11 +94,11 @@ passport.deserializeUser(async (id, done) => {
         if(rows[0].hasOwnProperty('idCliente')) {
             done(null, rows[0]);
         } else {
-            const rows2 = await connection.query('SELECT * FROM empleado WHERE idEempleado = ?', id);
+            const rows2 = await connection.query('SELECT * FROM empleado WHERE idEmpleado = ?', id);
             done(null, rows2[0]);
         }
     } catch (error) {
-        const rows3 = await connection('SELECT * FROM empleado WHERE idEmpledo = ?', id); 
+        const rows3 = await connection.query('SELECT * FROM empleado WHERE idEmpleado = ?', id); 
         done(null, rows3[0]);
     }
 });
