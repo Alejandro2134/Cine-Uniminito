@@ -1,0 +1,22 @@
+<div class="container p-4">
+    <h2>Tickets en reserva:</h2>
+    <br>
+    <div class="row">
+        {{#each tickets}}
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <form method="POST">
+                        <input type="hidden" value="{{Cliente_idCliente}}" name="idCliente" >
+                        <input type="hidden" value="{{idTicket}}" name="idTicket" >
+                        <h3>Fecha de compra: {{fechaCompra}}</h3>
+                        <h3>Precio: {{precio}}</h3>
+                        <div class="card-body">
+                            <button type="submit" class="btn btn-primary">Pagar</button>
+                        </div>
+                    </form>
+                </div>
+                <br>
+            </div>
+        {{/each}}
+    </div>
+</div>

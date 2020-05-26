@@ -54,6 +54,7 @@ app.use((req, res, next ) => {
 app.use(require('./routes/sesion'));
 app.use('/multiplex', require('./routes/multiplex'));
 app.use('/empleado', require('./routes/empleado'));
+app.use('/perfil', require('./routes/perfil'));
 
 //Configuración carpeta public
 app.use(express.static(path.join(__dirname, 'public')));

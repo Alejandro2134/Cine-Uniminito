@@ -53,7 +53,7 @@ passport.use('local.auth', new LocalStrategy ({
                 } else {
                     done(null, false, req.flash('message', 'Contraseña incorrecta'));
                 }
-        
+
             } else {
                 return done(null, false, req.flash('message', 'El nombre de usuario no existe'));
             }
